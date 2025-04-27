@@ -9,7 +9,7 @@ CREATE TABLE gowedges(
     friend_id INTEGER
 );
 
-\COPY gowedges FROM 'path/to/gowalla_edges.txt' DELIMITER '\t' CSV;
+\COPY gowedges FROM 'path/to/gowalla_edges.txt' DELIMITER E'\t' CSV;
 
 CREATE TABLE gowcheckins(
     user_id INTEGER,
@@ -19,4 +19,4 @@ CREATE TABLE gowcheckins(
     location_id INTEGER
 );
 
-\COPY gowcheckins FROM 'path/to/gowalla_checkins.txt' DELIMITER '\t' CSV;
+\COPY gowcheckins FROM 'path/to/gowalla_checkins.txt' DELIMITER E'\t' CSV;

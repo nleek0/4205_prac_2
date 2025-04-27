@@ -11,3 +11,4 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/")
 async def name(request:Request):
     return templates.TemplateResponse("index.html",{"request":request,"name":"4205a2"})
+
