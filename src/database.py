@@ -17,6 +17,8 @@ class Database:
             print("Unable to connect to the database")
             print(e)
     
+
+    
     def close(self):
         self.conn.close()
         self.cur.close()

@@ -8,7 +8,18 @@
     <link rel="stylesheet" href = "/static/style.css">
 </head>
 <body>
-    <div id = "map"></div>
+    <div class="container">
+        <div class="left-box">
+            Left container (1/5th)
+            <button onclick="addmarker('hi',20,-0.08)">Click Me!</button>
+            <hr>
+            List All Checkins
+            <button onclick="addmarker('hi',20,-0.08)">Click Me!</button>
+        </div>
+        <div class="main-content">
+            <div id = "map"></div>
+        </div>
+    </div>
 </body>
 </html>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

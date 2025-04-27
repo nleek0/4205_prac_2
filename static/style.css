@@ -1,4 +1,30 @@
 #map{
-    height: 100vh;
+    height: 98vh;
     width: 100%;
+}
+
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.left-box {
+    width: 20%;  /* Reserve 1/5th of the page width */
+    background-color: #f4f4f4;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.main-content {
+    width: 80%;  /* The remaining 4/5ths of the page width */
+    background-color: #fff;
+    padding: 10px;
+    box-sizing: border-box;
 }
