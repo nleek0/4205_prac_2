@@ -17,8 +17,12 @@ async def name(request:Request):
     return templates.TemplateResponse("index.html",{"request":request,"name":"4205a2"})
 
 @app.get("/get_checkins")
-async def get_checkins():
-    rows = database.get_checkins(0)
+async def get_checkins(request:Request):
+    user_id = request.query_params.get('myTextbox')
+    if not (user_id and user_id.isdigit()):
+        return
+
+    rows = database.get_checkins(user_id)
     columns = ["user_id", "latitude","longitude"]
     checkins = [dict(zip(columns,row)) for row in rows]
     return JSONResponse(content=checkins)

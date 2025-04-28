@@ -11,16 +11,19 @@
 <body>
     <div class="container">
         <div class="left-box">
-            Left container (1/5th)
-            <button onclick="addmarker('hi',20,-0.08)">Click Me!</button>
+            <button onclick="clear_everything()">Clear all elements</button>
             <hr>
-            List All Checkins 
+            <h4>List Check Ins</h4>
+            This functionality is used to display all the checkins given a user id. If user id does not exist, it will return nothing.
+            <br>
+            <input type="text" id="myTextbox" name="myTextbox" placeholder="0 to 196590">
             <button 
             hx-get="/get_checkins"  
             hx-trigger="click" 
             hx-swap = "none" 
+            hx-include="#myTextbox"
             hx-on:htmx:after-request = "handleCheckins(event)">
-            Click Me!</button>
+            List all checkins</button>
         </div>
         <div class="main-content">
             <div id = "map"></div>

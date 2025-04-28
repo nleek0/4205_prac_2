@@ -20,10 +20,11 @@ class Database:
     def get_checkins(self, user_id) -> list[tuple]:
         query = """
             SELECT user_id, latitude,longitude FROM gowcheckins
-            WHERE user_id = 0
+            WHERE user_id = %s
         """
-        #self.cur.execute(query (user_id,))
-        self.cur.execute(query)
+
+        self.cur.execute(query, (user_id,))
+        #self.cur.execute(query)
         rows = self.cur.fetchall()
         return rows
     
