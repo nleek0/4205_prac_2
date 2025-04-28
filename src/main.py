@@ -23,6 +23,8 @@ async def get_checkins(request:Request):
         return
 
     rows = database.get_checkins(user_id)
-    columns = ["user_id", "latitude","longitude"]
+    columns = ["user_id", "time" ,"latitude","longitude","location_id"]
     checkins = [dict(zip(columns,row)) for row in rows]
     return JSONResponse(content=checkins)
+
+

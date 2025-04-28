@@ -7,14 +7,15 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 function addmarker(row_tuple){
     const user_id = row_tuple["user_id"];
+    const time = row_tuple["time"];
     const latitude = row_tuple["latitude"];
     const longitude = row_tuple["longitude"];
+    const location_id = row_tuple["location_id"]
     L.marker([latitude,longitude]).addTo(map)
-    .bindPopup(`user_id: ${user_id}`);
+    .bindPopup(`user_id: ${user_id} <br> ${time} <br> location: ${location_id}`);
 }
 
 function handleCheckins(event) {
-    console.log("Hello");
     const responseText = event.detail.xhr.responseText;
     const checkins = JSON.parse(responseText); // Parse the JSON string into an object/array
     checkin_markers(checkins); // Now pass the data to your main function

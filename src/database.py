@@ -1,5 +1,6 @@
 import psycopg2
 from src.config import *
+#from config import *
 
 class Database:
     def __init__(self):
@@ -19,14 +20,15 @@ class Database:
     
     def get_checkins(self, user_id) -> list[tuple]:
         query = """
-            SELECT user_id, latitude,longitude FROM gowcheckins
+            SELECT * FROM gowcheckins
             WHERE user_id = %s
         """
 
         self.cur.execute(query, (user_id,))
-        #self.cur.execute(query)
         rows = self.cur.fetchall()
-        return rows
+        updated_rows = [(row[0],str(row[1]),row[2],row[3],row[4]) for row in rows]
+
+        return updated_rows
     
     def close(self):
         self.conn.close()
@@ -35,9 +37,4 @@ class Database:
     def test(self):
         self.cur.execute("SELECT * FROM gowcheckins limit 10")
         db_version = self.cur.fetchone()
-        print("Database version:", db_version)
-    
-
-hi = Database()
-hi.test()
-hi.close()
+        print(str(db_version[1]))
