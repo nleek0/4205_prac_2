@@ -10,10 +10,25 @@ L.marker([51.5, -0.09]).addTo(map)
     .openPopup();
 
 
-function addmarker(name,longitude, latitude){
+function addmarker(row_tuple){
+    console.log("yello");
+    var user_id = row_tuple["user_id"];
+    var latitude = row_tuple["latitude"];
+    var longitude = row_tuple["longitude"];
     L.marker([longitude, latitude]).addTo(map)
-    .bindPopup(name)
-    .openPopup();
+    .bindPopup(`user_id: ${user_id}`);
+}
+
+function handleCheckins(event) {
+    console.log("Hello");
+    const responseText = event.detail.xhr.responseText;
+    const checkins = JSON.parse(responseText); // Parse the JSON string into an object/array
+    checkin_markers(checkins); // Now pass the data to your main function
+}
+
+function checkin_markers(responseData){
+    console.log(responseData[0]);
+    addmarker(responseData[0]);
 }
 
 //addmarker("hi",20,-0.08);
