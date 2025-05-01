@@ -11,8 +11,40 @@ function addmarker(row_tuple){
     const latitude = row_tuple["latitude"];
     const longitude = row_tuple["longitude"];
     const location_id = row_tuple["location_id"]
+
+
+    const popupContent = `
+        user_id: ${user_id} <br> 
+        ${time} <br> 
+        location: ${location_id} <br>
+        <button 
+            onclick='console.log("hi")'
+            hx-get="/nn/${user_id}/${latitude}/${longitude}"  
+            hx-trigger="click" 
+            hx-swap="none" 
+            hx-on:htmx:after-request="handleNN(event)">
+            NN
+        </button>
+    `;
+
+    /*
     L.marker([latitude,longitude]).addTo(map)
-    .bindPopup(`user_id: ${user_id} <br> ${time} <br> location: ${location_id}`);
+    .bindPopup(popupContent);
+    */
+
+    const marker = L.marker([latitude, longitude]).addTo(map);
+    
+    // Create the popup but don't bind it immediately
+    const popup = L.popup().setContent(popupContent);
+    
+    // Add a listener for when the popup opens
+    marker.bindPopup(popup);
+    
+    // Process HTMX elements after popup is opened
+    marker.on('popupopen', function() {
+        // Process the newly added content with HTMX
+        htmx.process(popup.getElement());
+    });
 }
 
 function handleCheckins(event) {
@@ -33,6 +65,14 @@ function clear_everything(){
             map.removeLayer(layer);
         }
     });
+}
+
+function handleNN(event) {
+    console.log("NN working")
+    const responseText = event.detail.xhr.responseText;
+    const checkins = JSON.parse(responseText);
+    checkin_markers(checkins);
+
 }
 
 //addmarker("hi",20,-0.08);

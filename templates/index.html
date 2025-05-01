@@ -25,6 +25,15 @@
             hx-on:htmx:after-request = "handleCheckins(event)">
             List all checkins</button>
             <hr>
+            <h4>Nearest Friend</h4>
+            Given a user_id and a location_id, this function will return the 10 nearest friends based on distance.
+            <button 
+            onclick="console.log('hi')"
+            hx-get="/nn"  
+            hx-trigger="click" 
+            hx-swap = "none" 
+            hx-on:htmx:after-request = "handleNN(event)">
+            NN</button>
         </div>
         <div class="main-content">
             <div id = "map"></div>

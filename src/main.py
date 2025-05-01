@@ -27,4 +27,13 @@ async def get_checkins(request:Request):
     checkins = [dict(zip(columns,row)) for row in rows]
     return JSONResponse(content=checkins)
 
-
+@app.get("/nn/{user_id}/{latitude}/{longitude}")
+async def get_checkins(request:Request,user_id:str,latitude:str,longitude:str):
+    print("hello")
+    print(user_id,latitude,longitude)
+    #user_id, lat, lon = row_tuple.split(",")
+    #rows = database.get_nn("0","30.235","-97.795")
+    rows = database.get_nn(user_id,latitude,longitude)
+    columns = ["user_id", "time" ,"latitude","longitude","location_id"]
+    nearest_neighbours = [dict(zip(columns,row)) for row in rows]
+    return JSONResponse(content=nearest_neighbours)
