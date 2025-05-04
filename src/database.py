@@ -38,16 +38,18 @@ class Database:
         query = """
             SELECT *
             FROM (
-                SELECT ch.*
-                FROM gowedges e
-                JOIN gowcheckins ch ON ch.user_id = e.friend_id
-                WHERE e.user_id = %s
-            ) AS nearby_friends
-            ORDER BY ST_SetSRID(ST_MakePoint(%s, %s), 4326) <-> ST_SetSRID(ST_MakePoint(latitude, longitude), 4326)
+            SELECT DISTINCT ON (ch.user_id) ch.*,
+            ST_SetSRID(ST_MakePoint(%s, %s), 4326) <-> ST_SetSRID(ST_MakePoint(ch.latitude, ch.longitude), 4326) AS dist
+            FROM gowedges e
+            JOIN gowcheckins ch ON ch.user_id = e.friend_id
+            WHERE e.user_id = %s
+            ORDER BY ch.user_id, dist
+            ) sub
+            ORDER BY dist
             LIMIT 10;
         """
 
-        self.cur.execute(query, (user_id,latitude,longitude))
+        self.cur.execute(query, (latitude,longitude,user_id))
         rows = self.cur.fetchall()
         updated_rows = [(row[0],str(row[1]),row[2],row[3],row[4]) for row in rows]
 
@@ -57,3 +59,4 @@ class Database:
         self.cur.execute("SELECT * FROM gowcheckins limit 10")
         db_version = self.cur.fetchone()
         print(str(db_version[1]))
+
