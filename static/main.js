@@ -1,5 +1,6 @@
 var map = L.map('map').setView([39.828, -100], 4);
 
+
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -73,6 +74,27 @@ function handleNN(event) {
     const checkins = JSON.parse(responseText);
     checkin_markers(checkins);
 
+}
+
+function handleDTW(event){
+    console.log("DTW working")
+    const responseText = event.detail.xhr.responseText;
+    const users = JSON.parse(responseText);
+    DTW(users);
+}
+
+function getRandomColor() {
+    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+  }
+
+function DTW(users){
+    
+    for(let key in users){
+        console.log(key)
+        const latlngs = users[key]
+        const color = getRandomColor()
+        const polyline = L.polyline(latlngs, { color }).addTo(map);
+    } 
 }
 
 //addmarker("hi",20,-0.08);

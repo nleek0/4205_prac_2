@@ -20,3 +20,6 @@ CREATE TABLE gowcheckins(
 );
 
 \COPY gowcheckins FROM 'path/to/gowalla_checkins.txt' DELIMITER E'\t' CSV;
+
+CREATE INDEX IF NOT EXISTS idx_gowedges_user_id ON gowedges(user_id);
+CREATE INDEX IF NOT EXISTS idx_gowcheckins_user_id ON gowcheckins(user_id);

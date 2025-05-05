@@ -1,6 +1,9 @@
 import psycopg2
+from dtaidistance import dtw_ndim
+from fastdtw import fastdtw
 from src.config import *
 #from config import *
+from math import sqrt
 
 class Database:
     def __init__(self):
@@ -55,8 +58,60 @@ class Database:
 
         return updated_rows
 
+    def get_dtw(self,user_id):
+        friend_checkins = self.__dtw_friend_checkin(user_id)
+        coords_list = {}
+        for row in friend_checkins:
+            user = row[0]
+            latitude = row[1]
+            longitude = row[2]
+            if user in coords_list:
+                coords_list[user].append((latitude,longitude))
+            else:
+                coords_list[user] = [(latitude,longitude)]
+
+        user_checkins = list(self.__dtw_self_checkin(user_id))
+
+        dtw_list = {}
+        for key in list(coords_list.keys()):
+            dtw_list[key] = fastdtw(user_checkins,coords_list[key],dist = self.__coord_distance)[0]
+
+        closest_friend = sorted(dtw_list, key=lambda k: dtw_list[k])[:10]
+
+        closest_friend_dict = {key:coords_list[key] for key in closest_friend if key in coords_list}
+        return closest_friend_dict
+
+    def __dtw_friend_checkin(self, user_id):
+        query = """
+            SELECT ch.user_id, ch.latitude, ch.longitude
+            FROM gowcheckins ch
+            JOIN gowedges e ON ch.user_id = e.friend_id
+            WHERE e.user_id = %s
+            ORDER BY ch.user_id, ch.checkin_time;
+        """
+        self.cur.execute(query,(user_id,))
+        rows = self.cur.fetchall()
+        return rows
+    
+    def __dtw_self_checkin(self,user_id):
+        query = """
+            SELECT latitude, longitude
+            FROM gowcheckins ch
+            WHERE user_id = %s
+            ORDER BY checkin_time;
+        """
+        self.cur.execute(query,(user_id,))
+        rows = self.cur.fetchall()
+        return rows
+
+    def __coord_distance(self,a, b):
+        return sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
+
     def test(self):
         self.cur.execute("SELECT * FROM gowcheckins limit 10")
         db_version = self.cur.fetchone()
         print(str(db_version[1]))
 
+#db = Database()
+#hello = db.get_dtw(0)
+#print(hello)

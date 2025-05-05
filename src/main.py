@@ -35,3 +35,14 @@ async def get_checkins(request:Request,user_id:str,latitude:str,longitude:str):
     columns = ["user_id", "time" ,"latitude","longitude","location_id"]
     nearest_neighbours = [dict(zip(columns,row)) for row in rows]
     return JSONResponse(content=nearest_neighbours)
+
+@app.get("/dtw")
+async def get_checkins(request:Request):
+    user_id = request.query_params.get('myTextbox2')
+    if not (user_id and user_id.isdigit()):
+        return
+    
+    rows = database.get_dtw(user_id)
+    print("hi")
+    print(len(rows))
+    return JSONResponse(content=rows)

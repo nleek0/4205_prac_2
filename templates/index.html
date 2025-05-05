@@ -27,13 +27,22 @@
             <hr>
             <h4>Nearest Friend</h4>
             Given a user_id and a location_id, this function will return the 10 nearest friends based on distance.
+            This function can be found by opening a pop up on the map
+            <hr>
+            <h4>Nearest Friend Trajectory</h4>
+            Given a user, this function finds the 10 friends that share a similar trajectory. This is an implemenation of DTW.
+            Note: This function may take around 30 seconds
+            <br>
+            <input type="text" id="myTextbox2" name="myTextbox2" placeholder="0 to 196590">
             <button 
-            onclick="console.log('hi')"
-            hx-get="/nn"  
+            onclick = "console.log('click work')"
+            hx-get="/dtw"  
             hx-trigger="click" 
             hx-swap = "none" 
-            hx-on:htmx:after-request = "handleNN(event)">
-            NN</button>
+            hx-include="#myTextbox2"
+            hx-on:htmx:after-request = "handleDTW(event)">
+            List Nearest Trajectory</button>
+            
         </div>
         <div class="main-content">
             <div id = "map"></div>
