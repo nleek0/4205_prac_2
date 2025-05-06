@@ -88,13 +88,29 @@ function getRandomColor() {
   }
 
 function DTW(users){
-    
     for(let key in users){
         console.log(key)
         const latlngs = users[key]
         const color = getRandomColor()
         const polyline = L.polyline(latlngs, { color }).addTo(map);
+        polyline.bindPopup(`User ID: ${key}`)
     } 
 }
 
+function handleTraj(event){
+    console.log("handle work")
+    const responseText = event.detail.xhr.responseText;
+    const data = JSON.parse(responseText)
+    const user_id = Object.keys(data)[0];
+    const trajectory = data[user_id]
+    console.log(user_id)
+    get_trajectory(user_id, trajectory)
+}
+
+function get_trajectory(user_id,trajectory){
+    console.log("func work")
+    const color = getRandomColor()
+    const polyline = L.polyline(trajectory, { color }).addTo(map);
+    polyline.bindPopup(`User ID: ${user_id}`);
+}
 //addmarker("hi",20,-0.08);

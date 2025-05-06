@@ -43,6 +43,15 @@ async def get_checkins(request:Request):
         return
     
     rows = database.get_dtw(user_id)
-    print("hi")
-    print(len(rows))
     return JSONResponse(content=rows)
+
+@app.get("/traj")
+async def get_trajectory(request:Request):
+    print("hi")
+    user_id = request.query_params.get('myTextbox3')
+    if not (user_id and user_id.isdigit()):
+        return
+    print("user_id:",user_id)
+    rows = database.get_trajectory(user_id)
+    data = {user_id:rows}
+    return JSONResponse(content=data)

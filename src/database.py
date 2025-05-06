@@ -3,7 +3,6 @@ from dtaidistance import dtw_ndim
 from fastdtw import fastdtw
 from src.config import *
 #from config import *
-from math import sqrt
 
 class Database:
     def __init__(self):
@@ -73,7 +72,7 @@ class Database:
         user_checkins = list(self.__dtw_self_checkin(user_id))
 
         dtw_list = {}
-        for key in list(coords_list.keys()):
+        for key in coords_list:
             dtw_list[key] = fastdtw(user_checkins,coords_list[key],dist = self.__coord_distance)[0]
 
         closest_friend = sorted(dtw_list, key=lambda k: dtw_list[k])[:10]
@@ -104,8 +103,22 @@ class Database:
         rows = self.cur.fetchall()
         return rows
 
+
     def __coord_distance(self,a, b):
-        return sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
+        return ((a[0] - b[0])**2 + (a[1] - b[1])**2)**0.5
+        #return abs(a[0] - b[0]) + abs(a[1] - b[1])
+    
+    def get_trajectory(self,user_id):
+        query = """
+            SELECT latitude, longitude
+            FROM gowcheckins
+            WHERE user_id = %s
+            ORDER BY checkin_time;
+        """
+
+        self.cur.execute(query,(user_id,))
+        trajectory = self.cur.fetchall()
+        return trajectory
 
     def test(self):
         self.cur.execute("SELECT * FROM gowcheckins limit 10")
@@ -113,5 +126,9 @@ class Database:
         print(str(db_version[1]))
 
 #db = Database()
+#start = time()
 #hello = db.get_dtw(0)
-#print(hello)
+#finish = time() - start
+#print(finish)
+#hi = db.get_trajectory(0)
+#print(hi[1])

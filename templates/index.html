@@ -29,6 +29,19 @@
             Given a user_id and a location_id, this function will return the 10 nearest friends based on distance.
             This function can be found by opening a pop up on the map
             <hr>
+            <h4>List Trajectories</h4>
+            Given a user, this function list the trajectory that user has taken
+            <br>
+            <input type="text" id="myTextbox3" name="myTextbox3" placeholder="0 to 196590">
+            <button 
+            onclick = "console.log('click traj')"
+            hx-get="/traj"  
+            hx-trigger="click" 
+            hx-swap = "none" 
+            hx-include="#myTextbox3"
+            hx-on:htmx:after-request = "handleTraj(event)">
+            List Trajectory</button>
+            <hr>
             <h4>Nearest Friend Trajectory</h4>
             Given a user, this function finds the 10 friends that share a similar trajectory. This is an implemenation of DTW.
             Note: This function may take around 30 seconds
