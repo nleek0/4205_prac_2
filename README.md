@@ -21,15 +21,20 @@ The main purpose of this project is to aid new comers to data analytics understa
 ### Packages & Dependencies
 - All packages can be installed by installing the requirements.txt file
 - Third party python libraries include:
-  -psycogp2
-  -fastdtw
+  - `psycogp2` : This library is used to establish a connection between the database and the back end.
+  - `fastdtw` : This library is used for some of the functionality, particularly for dynamic time warping used in Query 4
 
 ---
 
 ## 3. Setup Instructions
 ### Environment Setup
+To install the dependencies, run the code below to install the dependencies:
+```bash
+pip install requirements.txt
+```
 
 ### Database Configuration
+The 
 
 ---
 ## 4. Code Structure
