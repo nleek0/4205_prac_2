@@ -35,8 +35,42 @@ pip install requirements.txt
 
 ### Database Configuration
 The code needed to set up the database in contained in `psql_queries.txt` file
-- How to intialise database: 
+PostgreSQL should be installed with the PostGIS extention and the [Gowalla dataset](https://snap.stanford.edu/data/loc-gowalla.html) should be downloaded
+Once these steps are completed, the following steps should be followed to initialise the database:
+- **Step 1**: Create the database and connect to it
+```bash
+psql
+CREATE DATABASE gowbackend;
+\c gowbackend
+```
+- **Step 2**: Create database schema and copy files
+```bash
+CREATE TABLE gowedges(
+    user_id INTEGER,
+    friend_id INTEGER
+);
 
+CREATE TABLE gowcheckins(
+    user_id INTEGER,
+    checkin_time TIMESTAMP,
+    latitude FLOAT,
+    longitude FLOAT,
+    location_id INTEGER
+);
+\COPY gowedges FROM 'path/to/gowalla_edges.txt' DELIMITER E'\t' CSV;
+\COPY gowcheckins FROM 'path/to/gowalla_checkins.txt' DELIMITER E'\t' CSV;
+```
+- **Step 4**: Create indexes on the tables
+```bash
+CREATE INDEX IF NOT EXISTS idx_gowedges_user_id ON gowedges(user_id);
+CREATE INDEX IF NOT EXISTS idx_gowcheckins_user_id ON gowcheckins(user_id);
+```
+- **Step 4**: Create a user and grant access on the tables
+```bash
+CREATE USER user WITH PASSWORD "password";
+GRANT SELECT ON gowcheckins TO user;
+GRANT SELECT ON gowedges TO user;
+```
 ---
 ## 4. Code Structure
 ### Frontend
