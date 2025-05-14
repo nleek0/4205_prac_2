@@ -96,13 +96,24 @@ dbpassword = "password"
 
 ---
 ## 6. How to Run the Application
-
+- **Step 1**: Change directory to the file:
+```bash
+cd PATH/TO/4205_prac_2
+```
+- **Step 2**: Activate environment, example below uses conda:
+```bash
+conda activate 4205
+```
+- **Step 3**: Use uvicorn to launch the application:
+```bash
+uvicorn src.main:app --reload
+```
 ---
 
 ## 7. Port Usage
 
 ## 8. UI Address
-
+http://127.0.0.1:8000/
 ## 9. Additional Motes
 
 ---
