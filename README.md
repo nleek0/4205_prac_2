@@ -93,6 +93,13 @@ dbpassword = "password"
 
 ---
 ## 5. Queries Implemented
+### 1. Get Checkins
+
+### 2. Neaerest Friend
+
+### 3. List Trajectory
+
+### 4. Closest Friend (DTW)
 
 ---
 ## 6. How to Run the Application
