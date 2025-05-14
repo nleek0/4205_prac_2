@@ -74,10 +74,22 @@ GRANT SELECT ON gowedges TO user;
 ---
 ## 4. Code Structure
 ### Frontend
+- `templates/index.html`: The only html file used for this project. Contains all the API calls between the front end and back end via HTMX.
+- `static/main.js`: All the Javascript functions(mainly for the leaflet functions) are contained in this file.
+- `static/style.css`: All the CSS code are contained in this file.
 
 ### Backend
+- `src/main.py`: This file manages all the response handling from the front end via FastAPI.
+- `src/database.py` This file contains all the back end functionality, including the connection to the database, and query execution.
 
-### Databaes Connection
+### Database Connection
+- `src/config.py`: This is a file that needs to be created when the repository is cloned. This file contains all the database variables for the psql server for the connection. An example of the code is shown below:
+```bash
+dbhost = "localhost"
+dbname = "dbname"
+dbuser = "postgres"
+dbpassword = "password"
+``` 
 
 ---
 ## 5. Queries Implemented
