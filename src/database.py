@@ -120,6 +120,21 @@ class Database:
         trajectory = self.cur.fetchall()
         return trajectory
 
+    def get_rectangle(self,user_id, lat_max, lat_min, lon_max, lon_min):
+        query = """
+            SELECT ch.*
+            FROM gowcheckins ch
+            JOIN gowedges e ON ch.user_id = e.friend_id
+            WHERE e.user_id = 0
+            AND ch.latitude >= 30 AND ch.latitude <= 50
+            AND ch.longitude >= 30 AND ch.longitude <= 50;
+        """
+        self.cur.execute(query)
+        rows = self.cur.fetchall()
+        updated_rows = [(row[0],str(row[1]),row[2],row[3],row[4]) for row in rows]
+        return updated_rows
+
+
     def test(self):
         self.cur.execute("SELECT * FROM gowcheckins limit 10")
         db_version = self.cur.fetchone()
@@ -132,3 +147,6 @@ class Database:
 #print(finish)
 #hi = db.get_trajectory(0)
 #print(hi[1])
+#hi = db.get_rectangle(0,0,0,0,0)
+#print(hi)
+

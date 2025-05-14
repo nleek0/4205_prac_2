@@ -1,10 +1,46 @@
 var map = L.map('map').setView([39.828, -100], 4);
+var flag = 0;
+var rec_coords = {0:false,1:false};
+var rec_latlng = {}
 
+var redIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+map.on('click', function(e) {
+    if (flag < 2){
+        const markerbind = L.marker(e.latlng, {icon : redIcon}).addTo(map);
+        flag += 1;
+        if (!rec_coords[0]){
+            rec_coords[0] = true;
+            rec_latlng[0] = e.latlng;
+            markerbind.on('click', function() {
+                map.removeLayer(markerbind);
+                flag -= 1;
+                rec_coords[0] = false;
+                delete rec_latlng[0];
+        });
+        } else if(!rec_coords[1]){
+            rec_coords[1] = true;
+            rec_latlng[1] = e.latlng;
+            markerbind.on('click', function() {
+                map.removeLayer(markerbind);
+                flag -= 1;
+                rec_coords[1] = false;
+                delete rec_latlng[1];
+        });
+        }
+    }
+  });
 
 function addmarker(row_tuple){
     const user_id = row_tuple["user_id"];
@@ -66,6 +102,10 @@ function clear_everything(){
             map.removeLayer(layer);
         }
     });
+
+    flag = 0;
+    rec_coords = {0:false, 1:false}
+    rec_latlng = {}
 }
 
 function handleNN(event) {
@@ -113,4 +153,12 @@ function get_trajectory(user_id,trajectory){
     const polyline = L.polyline(trajectory, { color }).addTo(map);
     polyline.bindPopup(`User ID: ${user_id}`);
 }
+
+function handleRec(event){
+    const responseText = event.detail.xhr.responseText;
+    const data = JSON.parse(responseText);
+    checkin_markers(data)
+}
+
+
 //addmarker("hi",20,-0.08);

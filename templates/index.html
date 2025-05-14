@@ -55,7 +55,20 @@
             hx-include="#myTextbox2"
             hx-on:htmx:after-request = "handleDTW(event)">
             List Nearest Trajectory</button>
-            
+            <hr>
+            <h4>Friends in a Rectangle</h4>
+            <br>
+            This function obtains all the friend checkins of a user in a given rectangle
+            <input type="text" id="myTextbox4" name="myTextbox4" placeholder="0 to 196590">
+            <button 
+            onclick = "console.log('rec work')"
+            hx-get="/rectangle"  
+            hx-trigger="click" 
+            hx-swap = "none" 
+            hx-include="#myTextbox4"
+            hx-on:htmx:after-request = "handleRec(event)">
+            List Rectangle
+            </button>
         </div>
         <div class="main-content">
             <div id = "map"></div>

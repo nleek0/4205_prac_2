@@ -37,7 +37,7 @@ async def get_checkins(request:Request,user_id:str,latitude:str,longitude:str):
     return JSONResponse(content=nearest_neighbours)
 
 @app.get("/dtw")
-async def get_checkins(request:Request):
+async def get_dtw(request:Request):
     user_id = request.query_params.get('myTextbox2')
     if not (user_id and user_id.isdigit()):
         return
@@ -55,3 +55,15 @@ async def get_trajectory(request:Request):
     rows = database.get_trajectory(user_id)
     data = {user_id:rows}
     return JSONResponse(content=data)
+
+@app.get("/rectangle")
+async def get_rectangle(request:Request):
+    print("gurt")
+    user_id = request.query_params.get('myTextbox4')
+    if not (user_id and user_id.isdigit()):
+        return
+    rows = database.get_rectangle(user_id,30,50,30,50)
+    print(rows[0])
+    columns = ["user_id", "time" ,"latitude","longitude","location_id"]
+    rectangle = [dict(zip(columns,row)) for row in rows]
+    return JSONResponse(content=rectangle)
