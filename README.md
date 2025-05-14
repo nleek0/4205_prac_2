@@ -16,7 +16,7 @@ The main purpose of this project is to aid new comers to data analytics understa
 ## 2. Technology Stack
 ### Programming Languages & Frameworks
 - Backend: Python with FastAPI
-- Frontend: Leaflet.js, JavaScript, HTML, HTMX
+- Frontend: Leaflet.js, HTML/CSS/JavaScript, HTMX
 - Database: PostgreSQL with PostGIS
 ### Packages & Dependencies
 - All packages can be installed by installing the requirements.txt file
@@ -34,7 +34,8 @@ pip install requirements.txt
 ```
 
 ### Database Configuration
-The 
+The code needed to set up the database in contained in `psql_queries.txt` file
+- How to intialise database: 
 
 ---
 ## 4. Code Structure
