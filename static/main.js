@@ -154,11 +154,45 @@ function get_trajectory(user_id,trajectory){
     polyline.bindPopup(`User ID: ${user_id}`);
 }
 
-function handleRec(event){
-    const responseText = event.detail.xhr.responseText;
-    const data = JSON.parse(responseText);
-    checkin_markers(data)
+async function handleRec(){
+    //const responseText = event.detail.xhr.responseText;
+    //const data = JSON.parse(responseText);
+    //checkin_markers(data)
+
+    if (flag === 2){
+        const user_id = document.getElementById('myTextbox4').value;
+        max_lat = Math.max(rec_latlng[0]["lat"],rec_latlng[1]["lat"]);
+        min_lat = Math.min(rec_latlng[0]["lat"],rec_latlng[1]["lat"]);
+        max_lon = Math.max(rec_latlng[0]["lng"],rec_latlng[1]["lng"]);
+        min_lon = Math.min(rec_latlng[0]["lng"],rec_latlng[1]["lng"]);
+        //console.log({"max_lat":max_lat, "min_lat": min_lat, "max_lon": max_lon, "min_lon": min_lon});
+        const response = await fetch('/rectangle',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ "user_id": user_id,"max_lat":max_lat, "min_lat": min_lat, "max_lon": max_lon, "min_lon": min_lon})
+        });
+        
+        const data = await response.json();
+        //const result = JSON.parse(data);
+        
+        //onsole.log(data[1]["user_id"])
+        checkin_markers(data);
+        //marker_cluster(data);
+    }
 }
+
+/*
+function marker_cluster(data){
+    console.log("cluster work")
+    const markers = L.markerClusterGroup()
+    data.forEach(point => {
+        const marker = L.marker([point["latitude"], point["longitude"]]);
+        markers.addLayer(marker);
+    });
+
+    map.addLayer(markers);
+}
+    */
 
 
 //addmarker("hi",20,-0.08);

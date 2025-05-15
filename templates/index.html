@@ -61,12 +61,7 @@
             This function obtains all the friend checkins of a user in a given rectangle
             <input type="text" id="myTextbox4" name="myTextbox4" placeholder="0 to 196590">
             <button 
-            onclick = "console.log('rec work')"
-            hx-get="/rectangle"  
-            hx-trigger="click" 
-            hx-swap = "none" 
-            hx-include="#myTextbox4"
-            hx-on:htmx:after-request = "handleRec(event)">
+            onclick = "handleRec()">
             List Rectangle
             </button>
         </div>

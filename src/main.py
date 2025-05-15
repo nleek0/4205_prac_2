@@ -56,8 +56,23 @@ async def get_trajectory(request:Request):
     data = {user_id:rows}
     return JSONResponse(content=data)
 
-@app.get("/rectangle")
-async def get_rectangle(request:Request):
+@app.post("/rectangle")
+async def get_rectangle(request : Request):
+    data = await request.json()
+    #print(data)
+    user_id = str(data['user_id'])
+    lat_max = str(data['max_lat'])
+    lat_min = str(data['min_lat'])
+    lon_max = str(data['max_lon'])
+    lon_min = str(data['min_lon'])
+    rows = database.get_rectangle(user_id, lat_max, lat_min, lon_max, lon_min)
+    #rows = database.get_rectangle("0","50","30","50","30")
+    columns = ["user_id", "time" ,"latitude","longitude","location_id"]
+    rectangle = [dict(zip(columns,row)) for row in rows]
+    return JSONResponse(content=rectangle)
+    #return {"x": "1", "y": "2"}
+
+    ''''
     print("gurt")
     user_id = request.query_params.get('myTextbox4')
     if not (user_id and user_id.isdigit()):
@@ -67,3 +82,4 @@ async def get_rectangle(request:Request):
     columns = ["user_id", "time" ,"latitude","longitude","location_id"]
     rectangle = [dict(zip(columns,row)) for row in rows]
     return JSONResponse(content=rectangle)
+    '''

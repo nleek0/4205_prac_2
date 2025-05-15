@@ -125,11 +125,12 @@ class Database:
             SELECT ch.*
             FROM gowcheckins ch
             JOIN gowedges e ON ch.user_id = e.friend_id
-            WHERE e.user_id = 0
-            AND ch.latitude >= 30 AND ch.latitude <= 50
-            AND ch.longitude >= 30 AND ch.longitude <= 50;
+            WHERE e.user_id = %s
+            AND ch.latitude >= %s AND ch.latitude <= %s
+            AND ch.longitude >= %s AND ch.longitude <= %s
+            LIMIT 2000;
         """
-        self.cur.execute(query)
+        self.cur.execute(query, (user_id, lat_min, lat_max, lon_min, lon_max))
         rows = self.cur.fetchall()
         updated_rows = [(row[0],str(row[1]),row[2],row[3],row[4]) for row in rows]
         return updated_rows
