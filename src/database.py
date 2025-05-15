@@ -1,5 +1,4 @@
 import psycopg2
-from dtaidistance import dtw_ndim
 from fastdtw import fastdtw
 from src.config import *
 #from config import *
