@@ -215,11 +215,13 @@ uvicorn src.main:app --reload
 ---
 
 ## 7. Port Usage
+Back End: 8000
+Server: 5432
 
 ## 8. UI Address
 http://127.0.0.1:8000/
 ## 9. Additional Notes
-
+- I'd like to acknowledge the use of AI tools, such as ChatGPT, for the assistance in development of the front end and the integreation between the front end and back end components. 
 ---
 ### Note
 
