@@ -94,12 +94,109 @@ dbpassword = "password"
 ---
 ## 5. Queries Implemented
 ### 1. Get Checkins
-
+- This query takes a user's id as an input and shows all the check ins on the map. This query helps to visualise the distribution of the different users.
+- SQL code is shown below:
+```sql
+SELECT * FROM gowcheckins
+WHERE user_id = user
+```
+- Inputs:
+  - `user`: This is the user_id
+- If the given user_id is empty or out of bounds, the query simply returns 0 rows and nothing will be displayed on the map
 ### 2. Neaerest Friend
+- This query takes a user's id, longitude, and latitude as the input and shows the nearest check ins on the map based on distance. This query can help highlight patterns of social proximity or regular locations. 
+- SQL code is shown below:
+```sql
+SELECT *
+FROM (
+SELECT DISTINCT ON (ch.user_id) ch.*,
+ST_SetSRID(ST_MakePoint(lat, lon), 4326) <-> ST_SetSRID(ST_MakePoint(ch.latitude, ch.longitude), 4326) AS dist
+FROM gowedges e
+JOIN gowcheckins ch ON ch.user_id = e.friend_id
+WHERE e.user_id = user
+ORDER BY ch.user_id, dist
+) sub
+ORDER BY dist
+LIMIT 10;
+```
+- Inputs:
+  - `user`: This is the given user
+  - `lat`: This is the latitude of the checkin
+  - `lon`: This is the longitude of the checkin
+- The inputs for this function are unique to each checkin marker on the map, therefore no missing/out of bound inputs can be entered.
 
 ### 3. List Trajectory
+- This query takes a user_id as the input and shows a path that the user has taken. This query helps visualise the path taken by users
+- SQL query below:
+```sql
+SELECT latitude, longitude
+FROM gowcheckins
+WHERE user_id = user
+ORDER BY checkin_time;
+```
+- Inputs:
+  - `user`: This is the given user_id
+- The query will not run if the given user is not an integer, and if the user_id is out of bound the query will not return any rows
 
 ### 4. Closest Friend (DTW)
+- This query takes a user_id as the input and shows the 10 nearest user paths. This query can help visualise different moving behaviours and to identify trends such as coordinated activites.
+- SQL queries below:
+```sql
+SELECT latitude, longitude
+FROM gowcheckins ch
+WHERE user_id = user
+ORDER BY checkin_time;
+```
+```sql
+SELECT ch.user_id, ch.latitude, ch.longitude
+FROM gowcheckins ch
+JOIN gowedges e ON ch.user_id = e.friend_id
+WHERE e.user_id = user
+ORDER BY ch.user_id, ch.checkin_time;
+```
+- Python code shown below with fastDTW implementation:
+```python
+def get_dtw(self,user_id):
+    friend_checkins = self.__dtw_friend_checkin(user_id)
+    coords_list = {}
+    for row in friend_checkins:
+        user = row[0]
+        latitude = row[1]
+        longitude = row[2]
+        if user in coords_list:
+            coords_list[user].append((latitude,longitude))
+        else:
+            coords_list[user] = [(latitude,longitude)]
+
+    user_checkins = list(self.__dtw_self_checkin(user_id))
+
+    dtw_list = {}
+    for key in coords_list:
+        dtw_list[key] = fastdtw(user_checkins,coords_list[key],dist = self.__coord_distance)[0]
+
+    closest_friend = sorted(dtw_list, key=lambda k: dtw_list[k])[:10]
+
+    closest_friend_dict = {key:coords_list[key] for key in closest_friend if key in coords_list}
+    return closest_friend_dict
+```
+- Inputs:
+  - `user`: This is the given user_id
+- The query will not run if the given user is not an integer, and if the user_id is out of bound the query will not return any rows
+
+### 5. Friends in a Rectangle
+- This query takes a user_id and a bounding rectangle as an input, and returns all the check ins of the user_id's friend within the bounding rectangle. The purpose of this query is to aid with identifying trends, such as localised friend groups or coordinate activities among users.
+- SQL query below:
+```sql
+SELECT ch.*
+FROM gowcheckins ch
+JOIN gowedges e ON ch.user_id = e.friend_id
+WHERE e.user_id = user
+AND ch.latitude >= min_lat AND ch.latitude <= max_lat
+AND ch.longitude >= min_lon AND ch.longitude <= max_lon;
+```
+- Inputs:
+  - `user`: This is the user_id
+  - `bounding box`: The bounding box is set by setting 2 markers on the map, which provides the domain and range for the latitude and longitude
 
 ---
 ## 6. How to Run the Application
@@ -121,7 +218,7 @@ uvicorn src.main:app --reload
 
 ## 8. UI Address
 http://127.0.0.1:8000/
-## 9. Additional Motes
+## 9. Additional Notes
 
 ---
 ### Note
