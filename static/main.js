@@ -176,23 +176,27 @@ async function handleRec(){
         //const result = JSON.parse(data);
         
         //onsole.log(data[1]["user_id"])
-        checkin_markers(data);
-        //marker_cluster(data);
+        //checkin_markers(data);
+        marker_cluster(data);
     }
 }
 
-/*
+
 function marker_cluster(data){
+    clear_everything()
     console.log("cluster work")
     const markers = L.markerClusterGroup()
     data.forEach(point => {
-        const marker = L.marker([point["latitude"], point["longitude"]]);
+        const marker = L.marker([point["latitude"], point["longitude"]])
+            .bindPopup(`user_id: ${point["user_id"]} <br>
+                        ${point["time"]} <br>
+                        location: ${point["location_id"]}`);
         markers.addLayer(marker);
     });
 
     map.addLayer(markers);
 }
-    */
+    
 
 
 //addmarker("hi",20,-0.08);

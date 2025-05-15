@@ -126,8 +126,7 @@ class Database:
             JOIN gowedges e ON ch.user_id = e.friend_id
             WHERE e.user_id = %s
             AND ch.latitude >= %s AND ch.latitude <= %s
-            AND ch.longitude >= %s AND ch.longitude <= %s
-            LIMIT 2000;
+            AND ch.longitude >= %s AND ch.longitude <= %s;
         """
         self.cur.execute(query, (user_id, lat_min, lat_max, lon_min, lon_max))
         rows = self.cur.fetchall()
