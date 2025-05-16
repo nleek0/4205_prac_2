@@ -139,7 +139,7 @@ ORDER BY checkin_time;
 - The query will not run if the given user is not an integer, and if the user_id is out of bound the query will not return any rows
 
 ### 4. Closest Friend (DTW)
-- This query takes a user_id as the input and shows the 10 nearest user paths. This query can help visualise different moving behaviours and to identify trends such as coordinated activites.
+- This query takes a user_id as the input and shows the 100 nearest user paths. This query can help visualise different moving behaviours and to identify trends such as coordinated activites.
 - SQL queries below:
 ```sql
 SELECT latitude, longitude
