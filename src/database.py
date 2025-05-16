@@ -47,7 +47,7 @@ class Database:
             ORDER BY ch.user_id, dist
             ) sub
             ORDER BY dist
-            LIMIT 10;
+            LIMIT 100;
         """
 
         self.cur.execute(query, (latitude,longitude,user_id))
